@@ -21,7 +21,8 @@ let GetData=async (keyword)=>{
                     items.push({id:render.videoId,thumbnail:render.thumbnail,title:render.title.runs[0].text,length:render.lengthText});
                 }
             });
-            resolve({items:items,apiToken:apiToken,continuation:contToken,context:context});
+            let nextPageContext={context:context,continuation:contToken};
+            resolve({items:items,nextPageToken:apiToken,nextPageContext:nextPageContext});
             
         }).catch(err=>{
             console.log(err);
