@@ -1,0 +1,27 @@
+{
+  "name": "youtube-search-api",
+  "version": "1.0.0",
+  "description": "Get Youtube results by provided keywords, no Login or api key required!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/damonwonghv/youtube-search-api.git"
+  },
+  "keywords": [
+    "Youtube",
+    "search",
+    "api"
+  ],
+  "author": "thisisdamon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/damonwonghv/youtube-search-api/issues"
+  },
+  "homepage": "https://github.com/damonwonghv/youtube-search-api#readme",
+  "dependencies": {
+    "axios": "^0.21.0"
+  }
+}
