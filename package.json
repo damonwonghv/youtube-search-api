@@ -1,6 +1,6 @@
 {
   "name": "youtube-search-api",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Easy to get Youtube results by provided keywords, no Login or API key required!",
   "main": "index.js",
   "scripts": {
