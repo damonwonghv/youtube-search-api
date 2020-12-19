@@ -22,7 +22,7 @@ let GetData=async (keyword)=>{
                 }
             });
             let nextPageContext={context:context,continuation:contToken};
-            resolve({items:items,nextPageToken:apiToken,nextPageContext:nextPageContext});
+            resolve({items:items,nextPage:{nextPageToken:apiToken,nextPageContext:nextPageContext}});
             
         }).catch(err=>{
             console.log(err);
@@ -31,10 +31,10 @@ let GetData=async (keyword)=>{
     });
 };
 
-let nextPage=async (token,data)=>{
-    let endpoint=`https://www.youtube.com/youtubei/v1/search?key=${token}`;
+let nextPage=async (nextPage)=>{
+    let endpoint=`https://www.youtube.com/youtubei/v1/search?key=${nextPage.nextPageToken}`;
     return new Promise((resolve, reject)=>{
-        axios.post(encodeURI(endpoint),data).then(page=>{
+        axios.post(encodeURI(endpoint),nextPage.nextPageContext).then(page=>{
             let item1=page.data.onResponseReceivedCommands[0].appendContinuationItemsAction;
             let items=[];
             item1.continuationItems[0].itemSectionRenderer.contents.forEach((item,index)=>{
