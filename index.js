@@ -43,7 +43,8 @@ let nextPage=async (nextPage)=>{
                     items.push({id:render.videoId,thumbnail:render.thumbnail,title:render.title.runs[0].text,length:render.lengthText});
                 }
             });
-            resolve({items:items,continuation:item1.continuationItems[1].continuationItemRenderer.continuationEndpoint.continuationCommand.token})
+            nextPage.nextPageContext.continuation=item1.continuationItems[1].continuationItemRenderer.continuationEndpoint.continuationCommand.token;
+            resolve({items:items,nextPage:nextPage});
         }).catch(err=>{
             console.log(err);
             reject(err);
