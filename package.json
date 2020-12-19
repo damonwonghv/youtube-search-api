@@ -1,0 +1,20 @@
+{
+  "name": "youtube-search-api",
+  "version": "1.0.0",
+  "description": "Get Youtube Search result without any login or api key",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "youtube",
+    "api",
+    "search"
+  ],
+  "author": "thisisdamon",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/damonwonghv/youtube-search-api.git"
+  }
+}
