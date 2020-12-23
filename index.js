@@ -10,16 +10,20 @@ let GetData=async (keyword)=>{
                         .twoColumnSearchResultsRenderer
                         .primaryContents
                         .sectionListRenderer;
-                        console.log(sectionListRenderer);
             const contToken=sectionListRenderer.contents[1].continuationItemRenderer.continuationEndpoint.continuationCommand.token;
             const apiToken=page.data.split("innertubeApiKey")[1].trim().split(",")[0].split('"')[2];
             const context=JSON.parse(page.data.split('INNERTUBE_CONTEXT')[1].trim().slice(2,-2));
             let items=[];
             sectionListRenderer.contents[0].itemSectionRenderer.contents.forEach((item,index)=>{
-                let render=item.videoRenderer;
-                if(render&&render.videoId){
-                    items.push({id:render.videoId,thumbnail:render.thumbnail,title:render.title.runs[0].text,length:render.lengthText});
+                let videoRender=item.videoRenderer;
+                let playListRender = item.playlistRenderer;
+                if (videoRender && videoRender.videoId){
+                    items.push({ id: videoRender.videoId,type:'video', thumbnail: videoRender.thumbnail, title: videoRender.title.runs[0].text, length: videoRender.lengthText});
                 }
+                if (playListRender && playListRender.playlistId) {
+                    items.push({ id: playListRender.playlistId, type: 'playlist', thumbnail: playListRender.thumbnails, title: playListRender.title.simpleText, length: playListRender.videoCount, videos: playListRender.videos});
+                }
+
             });
             let nextPageContext={context:context,continuation:contToken};
             resolve({items:items,nextPage:{nextPageToken:apiToken,nextPageContext:nextPageContext}});
