@@ -1,7 +1,7 @@
 {
   "name": "youtube-search-api",
-  "version": "1.0.3",
-  "description": "Easy to get Youtube results by provided keywords, no Login or API key required!",
+  "version": "1.0.5",
+  "description": "Node.js easy to get Youtube results by provided keywords, no Login or API key required!",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,7 +13,12 @@
   "keywords": [
     "Youtube",
     "search",
-    "api"
+    "api",
+    "youtube-search",
+    "youtube-api",
+    "youtube",
+    "api",
+    "play"
   ],
   "author": "thisisdamon",
   "license": "MIT",

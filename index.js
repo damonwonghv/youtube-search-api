@@ -1,5 +1,5 @@
 const axios=require("axios");
-let GetData=async (keyword)=>{
+let GetData=async (keyword,withPlaylist=false)=>{
     let endpoint=`https://www.youtube.com/results?search_query=${keyword}`;
     return new Promise((resolve, reject)=>{
         axios.get(encodeURI(endpoint)).then(page=>{
@@ -20,9 +20,12 @@ let GetData=async (keyword)=>{
                 if (videoRender && videoRender.videoId){
                     items.push({ id: videoRender.videoId,type:'video', thumbnail: videoRender.thumbnail, title: videoRender.title.runs[0].text, length: videoRender.lengthText});
                 }
-                if (playListRender && playListRender.playlistId) {
-                    items.push({ id: playListRender.playlistId, type: 'playlist', thumbnail: playListRender.thumbnails, title: playListRender.title.simpleText, length: playListRender.videoCount, videos: playListRender.videos});
+                if (withPlaylist){
+                    if (playListRender && playListRender.playlistId) {
+                        items.push({ id: playListRender.playlistId, type: 'playlist', thumbnail: playListRender.thumbnails, title: playListRender.title.simpleText, length: playListRender.videoCount, videos: playListRender.videos });
+                    }
                 }
+                
 
             });
             let nextPageContext={context:context,continuation:contToken};
