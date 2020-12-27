@@ -15,7 +15,7 @@ var youtubesearchapi=require('youtube-search-api');
 ```
 ## GetListByKeywords (Promise)
 ```node
-youtubesearchapi.GetListByKeyword("<keywords>")
+youtubesearchapi.GetListByKeyword("<keywords>",[playlist boolean])
 ```
 GetListByKeywords Result
 ```node
@@ -24,7 +24,7 @@ GetListByKeywords Result
 "items" is the array from youtube, "nextPage" needs to pass when going to the next page.
 ## NextPage (Promise)
 ```node
-youtubesearchapi.NextPage(<nextPage from GetListByKeywords result>)
+youtubesearchapi.NextPage(<nextPage from GetListByKeywords result>,[playlist boolean])
 ```
 NextPage Result
 ```node
@@ -37,7 +37,7 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 Please make sure to update tests as appropriate.
 
 ## TODO
-1. Playlist support
+1. Live stream resul
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)

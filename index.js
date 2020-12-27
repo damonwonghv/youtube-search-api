@@ -32,28 +32,34 @@ let GetData=async (keyword,withPlaylist=false)=>{
             resolve({items:items,nextPage:{nextPageToken:apiToken,nextPageContext:nextPageContext}});
             
         }).catch(err=>{
-            console.log(err);
+            console.error(err);
             reject(err);
         });
     });
 };
 
-let nextPage=async (nextPage)=>{
+let nextPage = async (nextPage, withPlaylist=false)=>{
     let endpoint=`https://www.youtube.com/youtubei/v1/search?key=${nextPage.nextPageToken}`;
     return new Promise((resolve, reject)=>{
         axios.post(encodeURI(endpoint),nextPage.nextPageContext).then(page=>{
             let item1=page.data.onResponseReceivedCommands[0].appendContinuationItemsAction;
             let items=[];
             item1.continuationItems[0].itemSectionRenderer.contents.forEach((item,index)=>{
-                let render=item.videoRenderer;
-                if(render&&render.videoId){
-                    items.push({id:render.videoId,thumbnail:render.thumbnail,title:render.title.runs[0].text,length:render.lengthText});
+                let videoRender = item.videoRenderer;
+                let playListRender = item.playlistRenderer;
+                if (videoRender && videoRender.videoId) {
+                    items.push({ id: videoRender.videoId, type: 'video', thumbnail: videoRender.thumbnail, title: videoRender.title.runs[0].text, length: videoRender.lengthText });
+                }
+                if (withPlaylist) {
+                    if (playListRender && playListRender.playlistId) {
+                        items.push({ id: playListRender.playlistId, type: 'playlist', thumbnail: playListRender.thumbnails, title: playListRender.title.simpleText, length: playListRender.videoCount, videos: playListRender.videos });
+                    }
                 }
             });
             nextPage.nextPageContext.continuation=item1.continuationItems[1].continuationItemRenderer.continuationEndpoint.continuationCommand.token;
             resolve({items:items,nextPage:nextPage});
         }).catch(err=>{
-            console.log(err);
+            console.error(err);
             reject(err);
         });
     });
