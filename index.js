@@ -97,7 +97,9 @@ let GetPlaylistData = async (playlistId) => {
             let items = [];
             videoItems.forEach(item=>{
                 let videoRender = item.playlistVideoRenderer;
-                items.push({ id: videoRender.videoId, type: 'video', thumbnail: videoRender.thumbnail, title: videoRender.title.runs[0].text, length: videoRender.lengthText });
+                if(videoRender&&videoRender.videoId){
+                    items.push({ id: videoRender.videoId, type: 'video', thumbnail: videoRender.thumbnail, title: videoRender.title.runs[0].text, length: videoRender.lengthText });
+                }
             });
             resolve({ items: items, metadata: metadata });
         }).catch(err => {
