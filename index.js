@@ -1,10 +1,9 @@
 const axios=require("axios");
-
+const youtubeEndpoint=`https://www.youtube.com`;
 
 let GetYoutubeInitData=async(url)=>{
     return new Promise((resolve,reject)=>{
         axios.get(encodeURI(url)).then(page => {
-            console.log(encodeURI(url));
             const data = page.data.split('var ytInitialData =')[1]
                 .split("</script>")[0]
                 .slice(0, -1);
@@ -27,7 +26,7 @@ let GetYoutubeInitData=async(url)=>{
 };
 
 let GetData=async (keyword,withPlaylist=false)=>{
-    let endpoint=`https://www.youtube.com/results?search_query=${keyword}`;
+    let endpoint=`${youtubeEndpoint}/results?search_query=${keyword}`;
     return new Promise((resolve, reject)=>{
         GetYoutubeInitData(endpoint).then(page=>{
             const sectionListRenderer = page.initdata.contents
@@ -38,18 +37,29 @@ let GetData=async (keyword,withPlaylist=false)=>{
             const apiToken = page.apiToken;
             const context = page.context;
             let items = [];
-            sectionListRenderer.contents[0].itemSectionRenderer.contents.forEach((item, index) => {
-                let videoRender = item.videoRenderer;
-                let playListRender = item.playlistRenderer;
-                if (videoRender && videoRender.videoId) {
-                    items.push({ id: videoRender.videoId, type: 'video', thumbnail: videoRender.thumbnail, title: videoRender.title.runs[0].text, length: videoRender.lengthText });
-                }
-                if (withPlaylist) {
-                    if (playListRender && playListRender.playlistId) {
-                        console.log(playListRender.videoCount)
-                        items.push({ id: playListRender.playlistId, type: 'playlist', thumbnail: playListRender.thumbnails, title: playListRender.title.simpleText, length: playListRender.videoCount, videos: playListRender.videos, videoCount: playListRender.videoCount});
+            sectionListRenderer.contents[0].itemSectionRenderer.contents.forEach((item) => {
+                
+                if(item.channelRenderer){
+                    let channelRenderer=item.channelRenderer;
+                    items.push({ id: channelRenderer.channelId, type: 'channel', thumbnail: channelRenderer.thumbnail, title: channelRenderer.title.simpleText });
+                }else{
+                    let videoRender = item.videoRenderer;
+                    let playListRender = item.playlistRenderer;
+                    let isLive=false;
+                    if (videoRender && videoRender.videoId) {
+                        if(videoRender.badges&&videoRender.badges.length>0&&videoRender.badges[0].metadataBadgeRenderer&&videoRender.badges[0].metadataBadgeRenderer.style=="BADGE_STYLE_TYPE_LIVE_NOW"){
+                            isLive=true;
+                        }
+                        items.push({ id: videoRender.videoId, type: 'video', thumbnail: videoRender.thumbnail, title: videoRender.title.runs[0].text, length: videoRender.lengthText,isLive:isLive });
+                    }
+                    if (withPlaylist) {
+                        if (playListRender && playListRender.playlistId) {
+                            console.log(playListRender.videoCount)
+                            items.push({ id: playListRender.playlistId, type: 'playlist', thumbnail: playListRender.thumbnails, title: playListRender.title.simpleText, length: playListRender.videoCount, videos: playListRender.videos, videoCount: playListRender.videoCount,isLive:false});
+                        }
                     }
                 }
+                
             });
             let nextPageContext = { context: context, continuation: contToken };
             resolve({ items: items, nextPage: { nextPageToken: apiToken, nextPageContext: nextPageContext } });
@@ -61,7 +71,7 @@ let GetData=async (keyword,withPlaylist=false)=>{
 };
 
 let nextPage = async (nextPage, withPlaylist=false)=>{
-    let endpoint=`https://www.youtube.com/youtubei/v1/search?key=${nextPage.nextPageToken}`;
+    let endpoint=`${youtubeEndpoint}/youtubei/v1/search?key=${nextPage.nextPageToken}`;
     return new Promise((resolve, reject)=>{
         axios.post(encodeURI(endpoint),nextPage.nextPageContext).then(page=>{
             let item1=page.data.onResponseReceivedCommands[0].appendContinuationItemsAction;
@@ -69,8 +79,12 @@ let nextPage = async (nextPage, withPlaylist=false)=>{
             item1.continuationItems[0].itemSectionRenderer.contents.forEach((item,index)=>{
                 let videoRender = item.videoRenderer;
                 let playListRender = item.playlistRenderer;
+                let isLive=false;
                 if (videoRender && videoRender.videoId) {
-                    items.push({ id: videoRender.videoId, type: 'video', thumbnail: videoRender.thumbnail, title: videoRender.title.runs[0].text, length: videoRender.lengthText });
+                    if(videoRender.badges&&videoRender.badges.length>0&&videoRender.badges[0].metadataBadgeRenderer&&videoRender.badges[0].metadataBadgeRenderer.style=="BADGE_STYLE_TYPE_LIVE_NOW"){
+                        isLive=true;
+                    }
+                    items.push({ id: videoRender.videoId, type: 'video', thumbnail: videoRender.thumbnail, title: videoRender.title.runs[0].text, length: videoRender.lengthText,isLive:isLive });
                 }
                 if (withPlaylist) {
                     if (playListRender && playListRender.playlistId) {
@@ -88,7 +102,7 @@ let nextPage = async (nextPage, withPlaylist=false)=>{
 };
 
 let GetPlaylistData = async (playlistId) => {
-    let endpoint = `https://www.youtube.com/playlist?list=${playlistId}`;
+    let endpoint = `${youtubeEndpoint}/playlist?list=${playlistId}`;
     return new Promise((resolve, reject) => {
         GetYoutubeInitData(endpoint).then(initData => {
             const sectionListRenderer = initData.initdata;
@@ -109,8 +123,36 @@ let GetPlaylistData = async (playlistId) => {
     });
 };
 
-
+let GetSuggestData=async ()=>{
+    let endpoint=`${youtubeEndpoint}`;
+    return new Promise(async(resolve,reject)=>{
+        GetYoutubeInitData(endpoint).then(page=>{
+            const sectionListRenderer = page.initdata.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.richGridRenderer.contents;
+            let items = [];
+            let otherItems=[];
+            sectionListRenderer.forEach(item=>{
+                if(item.richItemRenderer&&item.richItemRenderer.content){
+                    let videoRender=item.richItemRenderer.content.videoRenderer;
+                    let isLive=false;
+                    if (videoRender && videoRender.videoId) {
+                        if(videoRender.badges&&videoRender.badges.length>0&&videoRender.badges[0].metadataBadgeRenderer&&videoRender.badges[0].metadataBadgeRenderer.style=="BADGE_STYLE_TYPE_LIVE_NOW"){
+                            isLive=true;
+                        }
+                        items.push({ id: videoRender.videoId, type: 'video', thumbnail: videoRender.thumbnail, title: videoRender.title.runs[0].text, length: videoRender.lengthText,isLive:isLive  });
+                    }else{
+                        otherItems.push(videoRender);
+                    }
+                }
+            });
+            resolve({ items: items});
+        }).catch(err=>{
+            console.error(err);
+            reject(err);
+        });
+    });
+};
 
 exports.GetListByKeyword=GetData;
 exports.NextPage=nextPage;
 exports.GetPlaylistData = GetPlaylistData;
+exports.GetSuggestData=GetSuggestData;

@@ -20,3 +20,9 @@ youtube.GetPlaylistData('PLZCZY5m1Qr1nF4wkr1Ly4dG7ehSP-Qom8').then(res=>{
 }).catch(err=>{
     console.log(err);
 });
+
+youtube.GetSuggestData().then(res=>{
+    console.log(res);
+}).catch(err=>{
+    console.log(err);
+});
