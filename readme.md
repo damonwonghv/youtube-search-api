@@ -51,13 +51,31 @@ Suggest Data Result
 ```
 Item with Video type will return ```isLive=[true/false]``` to identify live video or not.
 
+## Get Channel by channel Id (Promise)
+```node
+youtubesearchapi.GetChannelById(<channel ID>)
+```
+Channel Data Results
+```node
+[
+  [ { title: '[title]', content: [Object] } ]
+]
+```
+Will return tabs in array format.
+
+## Message
+If you want to work with me to fix bug or implement new idea. You are available to send me some new idea of this project.
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
 
 ## TODO
-1. Support front-end (Vue, React)
+1. Support front-end (Vue, React) (On going)
+
+## Bug fixed
+This version 1.0.10 may fix the issue of live video detect, report by user.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
