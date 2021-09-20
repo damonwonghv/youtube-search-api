@@ -1,11 +1,15 @@
 # Youtube Search API
 
-Youtube Search API is an API for getting Youtube search results.
+Youtube Search API is an unofficial API for getting Youtube search results.
 
 ## Installation
-
+Using NPM
 ```bash
 npm install youtube-search-api
+```
+Using Yarn
+```bash
+yarn add youtube-search-api
 ```
 
 ## Usage (import)
@@ -15,7 +19,7 @@ var youtubesearchapi=require('youtube-search-api');
 ```
 ## GetListByKeywords (Promise)
 ```node
-youtubesearchapi.GetListByKeyword("<keywords>",[playlist boolean])
+youtubesearchapi.GetListByKeyword("<keywords>",[playlist boolean], limit) // limit is optional
 ```
 GetListByKeywords Result
 ```node
@@ -34,7 +38,7 @@ Item with Video type will return ```isLive=[true/false]``` to identify live vide
 
 ## Playlist with ID (Promise)
 ```node
-youtubesearchapi.GetPlaylistData(<Playlist Id>)
+youtubesearchapi.GetPlaylistData(<Playlist Id>, limit) // limit is optional
 ```
 Playlist Result
 ```node
@@ -43,7 +47,7 @@ Playlist Result
 
 ## Get Suggest Data (Promise)
 ```node
-youtubesearchapi.GetSuggestData()
+youtubesearchapi.GetSuggestData(limit) // limit is optional
 ```
 Suggest Data Result
 ```node
@@ -53,7 +57,7 @@ Item with Video type will return ```isLive=[true/false]``` to identify live vide
 
 ## Get Channel by channel Id (Promise)
 ```node
-youtubesearchapi.GetChannelById(<channel ID>)
+youtubesearchapi.GetChannelById(<channel ID>, limit) // limit is optional
 ```
 Channel Data Results
 ```node

@@ -25,25 +25,25 @@ let GetYoutubeInitData=async(url)=>{
     });
 };
 
-let GetData=async (keyword,withPlaylist=false)=>{
-    let endpoint=`${youtubeEndpoint}/results?search_query=${keyword}`;
-    return new Promise((resolve, reject)=>{
-        GetYoutubeInitData(endpoint).then(async page=>{
+let GetData=async (keyword, withPlaylist=false, limit = 0) => {
+    let endpoint = `${youtubeEndpoint}/results?search_query=${keyword}`;
+    return new Promise((resolve, reject) => {
+        GetYoutubeInitData(endpoint).then(async page => {
             const sectionListRenderer =await page.initdata.contents
                 .twoColumnSearchResultsRenderer
                 .primaryContents
                 .sectionListRenderer;
-            let contToken =await {};
-            let items =await [];
-            await sectionListRenderer.contents.forEach(content=>{
+            let contToken = {};
+            let items = [];
+            await sectionListRenderer.contents.forEach(content => {
                 if(content.continuationItemRenderer){
-                    contToken=content.continuationItemRenderer.continuationEndpoint.continuationCommand.token;
+                    contToken = content.continuationItemRenderer.continuationEndpoint.continuationCommand.token;
                 }else if(content.itemSectionRenderer){
                     content.itemSectionRenderer.contents.forEach((item) => {
-                        if(item.channelRenderer){
-                            let channelRenderer=item.channelRenderer;
+                        if(item.channelRenderer) {
+                            let channelRenderer = item.channelRenderer;
                             items.push({ id: channelRenderer.channelId, type: 'channel', thumbnail: channelRenderer.thumbnail, title: channelRenderer.title.simpleText });
-                        }else{
+                        } else {
                             let videoRender = item.videoRenderer;
                             let playListRender = item.playlistRenderer;
                             
@@ -52,17 +52,24 @@ let GetData=async (keyword,withPlaylist=false)=>{
                             }
                             if (withPlaylist) {
                                 if (playListRender && playListRender.playlistId) {
-                                    items.push({ id: playListRender.playlistId, type: 'playlist', thumbnail: playListRender.thumbnails, title: playListRender.title.simpleText, length: playListRender.videoCount, videos: playListRender.videos, videoCount: playListRender.videoCount,isLive:false});
+                                    items.push({ id: playListRender.playlistId, type: 'playlist', thumbnail: playListRender.thumbnails, title: playListRender.title.simpleText, length: playListRender.videoCount, videos: playListRender.videos, videoCount: playListRender.videoCount, isLive:false });
                                 }
                             }
                         }
                     });
                 }
-            });            
-            const apiToken =await page.apiToken;
-            const context =await page.context;
-            let nextPageContext = await{ context: context, continuation: contToken };
-            await resolve({ items: items, nextPage: { nextPageToken: apiToken, nextPageContext: nextPageContext } });
+            });
+            const apiToken = await page.apiToken;
+            const context = await page.context;
+            let nextPageContext = { context: context, continuation: contToken };
+
+            const others = { nextPage: { nextPageToken: apiToken, nextPageContext: nextPageContext } }
+
+            if (limit > 0) {
+                resolve({ items: items.slice(0, limit), ...others })
+            } else {
+                resolve({ items: items, ...others })
+            }
         }).catch(err => {
             console.error(err);
             reject(err);
@@ -104,7 +111,7 @@ let nextPage = async (nextPage, withPlaylist=false)=>{
     });
 };
 
-let GetPlaylistData = async (playlistId) => {
+let GetPlaylistData = async (playlistId, limit = 0) => {
     let endpoint = `${youtubeEndpoint}/playlist?list=${playlistId}`;
     return new Promise((resolve, reject) => {
         GetYoutubeInitData(endpoint).then(initData => {
@@ -118,7 +125,13 @@ let GetPlaylistData = async (playlistId) => {
                     items.push(VideoRender(item));
                 }
             });
-            resolve({ items: items, metadata: metadata });
+
+            const others = { metadata }
+
+            if (limit > 0)
+                resolve({ items: items.slice(0, limit), ...others })
+            else
+                resolve({ items: items, ...others });
         }).catch(err => {
             console.error(err);
             reject(err);
@@ -126,7 +139,7 @@ let GetPlaylistData = async (playlistId) => {
     });
 };
 
-let GetSuggestData=async ()=>{
+let GetSuggestData=async (limit = 0)=>{
     let endpoint=`${youtubeEndpoint}`;
     return new Promise(async(resolve,reject)=>{
         GetYoutubeInitData(endpoint).then(page=>{
@@ -143,7 +156,12 @@ let GetSuggestData=async ()=>{
                     }
                 }
             });
-            resolve({ items: items});
+            
+            if (limit > 0)
+                resolve({ items: items.slice(0, limit) })
+            else 
+                resolve({ items: items })
+
         }).catch(err=>{
             console.error(err);
             reject(err);
@@ -151,16 +169,21 @@ let GetSuggestData=async ()=>{
     });
 };
 
-let GetChannelById=async (channelId)=>{
+let GetChannelById=async (channelId, limit = 0)=>{
     return new Promise((resolve, reject)=>{
-        let endpoint=`${youtubeEndpoint}/channel/${channelId}`;
+        let endpoint=`${youtubeEndpoint}/c/${channelId}`;
         let items=[];
         GetYoutubeInitData(endpoint).then(page=>{
             let tabs=page.initdata.contents.twoColumnBrowseResultsRenderer.tabs;
             tabs.forEach(async tab=>{
-                await items.push(TabRender(tab));
+                items.push(TabRender(tab));
             });
-            resolve(items);
+            
+            if (limit > 0)
+                resolve({ items: items.slice(0, limit) })
+            else 
+                resolve({ items: items })
+
         }).catch(err=>{
             reject(err);
         });

@@ -1,0 +1,258 @@
+{
+    "items": [
+    {
+        "id": "73FuCpmShDo",
+        "type": "video",
+        "thumbnail": {
+            "thumbnails": [{
+                "url": "https://i.ytimg.com/vi/73FuCpmShDo/hq720.jpg?sqp=-oaymwEjCOgCEMoBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLDdK5wWZrJexaO3yWBePloqm1TTTg",
+                "width": 360,
+                "height": 202
+            }, {
+                "url": "https://i.ytimg.com/vi/73FuCpmShDo/hq720.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLA94pqp1daxaHAx-GQTtTF3qOKkNw",
+                "width": 720,
+                "height": 404
+            }]
+        },
+        "title": "The Chainsmokers - See The Way (Lyric Video) ft. Sabrina Claudio",
+        "shortBylineText": {
+            "runs": [{
+                "text": "The Chainsmokers",
+                "navigationEndpoint": {
+                    "clickTrackingParams": "CMgBENwwGAAiEwiJwouPgI7zAhVHgGMGHTt-DI0=",
+                    "commandMetadata": {
+                        "webCommandMetadata": {
+                            "url": "/channel/UCq3Ci-h945sbEYXpVlw7rJg",
+                            "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                            "rootVe": 3611,
+                            "apiUrl": "/youtubei/v1/browse"
+                        }
+                    },
+                    "browseEndpoint": {
+                        "browseId": "UCq3Ci-h945sbEYXpVlw7rJg",
+                        "canonicalBaseUrl": "/channel/UCq3Ci-h945sbEYXpVlw7rJg"
+                    }
+                }
+            }]
+        },
+        "length": {
+            "accessibility": {
+                "accessibilityData": {
+                    "label": "2 minit, 59 saat"
+                }
+            },
+            "simpleText": "2:59"
+        },
+        "isLive": false
+    }, {
+        "id": "BE2HpMTvbhU",
+        "type": "video",
+        "thumbnail": {
+            "thumbnails": [{
+                "url": "https://i.ytimg.com/vi/BE2HpMTvbhU/hq720.jpg?sqp=-oaymwEjCOgCEMoBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLCTeWEKWq7vfc3FvrB62xO-OA4ODQ",
+                "width": 360,
+                "height": 202
+            }, {
+                "url": "https://i.ytimg.com/vi/BE2HpMTvbhU/hq720.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLBbAnkIJ0FfNiqV_YlBHPeLf-hRVA",
+                "width": 720,
+                "height": 404
+            }]
+        },
+        "title": "The Chainsmokers - See The Way (Lyrics) feat. Sabrina Claudio",
+        "shortBylineText": {
+            "runs": [{
+                "text": "7clouds",
+                "navigationEndpoint": {
+                    "clickTrackingParams": "CMQBENwwGAEiEwiJwouPgI7zAhVHgGMGHTt-DI0=",
+                    "commandMetadata": {
+                        "webCommandMetadata": {
+                            "url": "/user/monstafluffmusicTV",
+                            "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                            "rootVe": 3611,
+                            "apiUrl": "/youtubei/v1/browse"
+                        }
+                    },
+                    "browseEndpoint": {
+                        "browseId": "UCNqFDjYTexJDET3rPDrmJKg",
+                        "canonicalBaseUrl": "/user/monstafluffmusicTV"
+                    }
+                }
+            }]
+        },
+        "length": {
+            "accessibility": {
+                "accessibilityData": {
+                    "label": "2 minit, 55 saat"
+                }
+            },
+            "simpleText": "2:55"
+        },
+        "isLive": false
+    }, {
+        "id": "ht84VEppIEk",
+        "type": "video",
+        "thumbnail": {
+            "thumbnails": [{
+                "url": "https://i.ytimg.com/vi/ht84VEppIEk/hq720.jpg?sqp=-oaymwEjCOgCEMoBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLC9k-v9lZzoKBitb1CVXGxzeqMPHw",
+                "width": 360,
+                "height": 202
+            }, {
+                "url": "https://i.ytimg.com/vi/ht84VEppIEk/hq720.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLDiApLszCYu715EuCmzjVhotkAXWw",
+                "width": 720,
+                "height": 404
+            }]
+        },
+        "title": "The Chainsmokers, Sabrina Claudio - See The Way (Lyrics)",
+        "shortBylineText": {
+            "runs": [{
+                "text": "Pop Paradise",
+                "navigationEndpoint": {
+                    "clickTrackingParams": "CL8BENwwGAMiEwiJwouPgI7zAhVHgGMGHTt-DI0=",
+                    "commandMetadata": {
+                        "webCommandMetadata": {
+                            "url": "/channel/UCS2wVbtTdElVXxuc1OpRy1A",
+                            "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                            "rootVe": 3611,
+                            "apiUrl": "/youtubei/v1/browse"
+                        }
+                    },
+                    "browseEndpoint": {
+                        "browseId": "UCS2wVbtTdElVXxuc1OpRy1A"
+                    }
+                }
+            }]
+        },
+        "length": {
+            "accessibility": {
+                "accessibilityData": {
+                    "label": "2 minit, 59 saat"
+                }
+            },
+            "simpleText": "2:59"
+        },
+        "isLive": false
+    }, {
+        "id": "HncZncQBsYw",
+        "type": "video",
+        "thumbnail": {
+            "thumbnails": [{
+                "url": "https://i.ytimg.com/vi/HncZncQBsYw/hq720.jpg?sqp=-oaymwEjCOgCEMoBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLAI0A2DY7U01ApUOTkVYXZvYlNfwg",
+                "width": 360,
+                "height": 202
+            }, {
+                "url": "https://i.ytimg.com/vi/HncZncQBsYw/hq720.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLAQwniE-Z9F3EK7UPnLGMnLK9-hpA",
+                "width": 720,
+                "height": 404
+            }]
+        },
+        "title": "The Chainsmokers & Sabrina Claudio - See The Way (Traducida al Español)",
+        "shortBylineText": {
+            "runs": [{
+                "text": "Aureal",
+                "navigationEndpoint": {
+                    "clickTrackingParams": "CLsBENwwGAQiEwiJwouPgI7zAhVHgGMGHTt-DI0=",
+                    "commandMetadata": {
+                        "webCommandMetadata": {
+                            "url": "/channel/UCAyUvFMX_fvoxHydmkXAN5g",
+                            "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                            "rootVe": 3611,
+                            "apiUrl": "/youtubei/v1/browse"
+                        }
+                    },
+                    "browseEndpoint": {
+                        "browseId": "UCAyUvFMX_fvoxHydmkXAN5g"
+                    }
+                }
+            }]
+        },
+        "length": {
+            "accessibility": {
+                "accessibilityData": {
+                    "label": "2 minit, 59 saat"
+                }
+            },
+            "simpleText": "2:59"
+        },
+        "isLive": false
+    }, {
+        "id": "HcYo_92vdbE",
+        "type": "video",
+        "thumbnail": {
+            "thumbnails": [{
+                "url": "https://i.ytimg.com/vi/HcYo_92vdbE/hq720.jpg?sqp=-oaymwEjCOgCEMoBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLDtng8kkafXj03wxeMxbS3abyL_Sw",
+                "width": 360,
+                "height": 202
+            }, {
+                "url": "https://i.ytimg.com/vi/HcYo_92vdbE/hq720.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLC8coniXR_Z5O5ZD8p3wz5QZQcknw",
+                "width": 720,
+                "height": 404
+            }]
+        },
+        "title": "The Chainsmokers - Push My Luck (Official Video)",
+        "shortBylineText": {
+            "runs": [{
+                "text": "The Chainsmokers",
+                "navigationEndpoint": {
+                    "clickTrackingParams": "CLcBENwwGAUiEwiJwouPgI7zAhVHgGMGHTt-DI0=",
+                    "commandMetadata": {
+                        "webCommandMetadata": {
+                            "url": "/channel/UCq3Ci-h945sbEYXpVlw7rJg",
+                            "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                            "rootVe": 3611,
+                            "apiUrl": "/youtubei/v1/browse"
+                        }
+                    },
+                    "browseEndpoint": {
+                        "browseId": "UCq3Ci-h945sbEYXpVlw7rJg",
+                        "canonicalBaseUrl": "/channel/UCq3Ci-h945sbEYXpVlw7rJg"
+                    }
+                }
+            }]
+        },
+        "length": {
+            "accessibility": {
+                "accessibilityData": {
+                    "label": "3 minit, 3 saat"
+                }
+            },
+            "simpleText": "3:03"
+        },
+        "isLive": false
+    }],
+    "nextPage": {
+        "nextPageToken": "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
+        "nextPageContext": {
+            "context": {
+                "client": {
+                    "hl": "ms",
+                    "gl": "MY",
+                    "remoteHost": "175.138.58.36",
+                    "deviceMake": "",
+                    "deviceModel": "",
+                    "visitorData": "Cgt5MVFDSjdERl95ayij9aKKBg%3D%3D",
+                    "userAgent": "axios/0.21.4,gzip(gfe)",
+                    "clientName": "WEB",
+                    "clientVersion": "2.20210916.00.00",
+                    "osName": "",
+                    "osVersion": "",
+                    "originalUrl": "https://www.youtube.com/results?search_query=The+Chainsmokers+See+The+Way",
+                    "platform": "DESKTOP",
+                    "clientFormFactor": "UNKNOWN_FORM_FACTOR",
+                    "configInfo": {
+                        "appInstallData": "CKP1oooGEJ2y_RIQktWtBRCR-PwSENi-rQU%3D"
+                    }
+                },
+                "user": {
+                    "lockedSafetyMode": false
+                },
+                "request": {
+                    "useSsl": true
+                },
+                "clickTracking": {
+                    "clickTrackingParams": "IhMIxtyJj4CO8wIVaOU4Bh3Z4Aq9"
+                }
+            },
+            "continuation": "Ep8DEhxUaGUgQ2hhaW5zbW9rZXJzIFNlZSBUaGUgV2F5Gv4CU0JTQ0FRczNNMFoxUTNCdFUyaEViNElCQzBKRk1raHdUVlIyWW1oVmdnRU5Va1EzTTBaMVEzQnRVMmhFYjRJQkMyaDBPRFJXUlhCd1NVVnJnZ0VMU0c1aldtNWpVVUp6V1hlQ0FRdElZMWx2WHpreWRtUmlSWUlCQ3pnd2FWQTJlRjlMYzFJNGdnRUxaM2RPYkVWcGFXVkpUV09DQVF0R1RUZE5SbGx2ZVd4V2M0SUJDMlpsWkVGaWJFaGxhVEZSZ2dFTE16Tk5NbTFTZWpSWE9WR0NBUXQ0WlZsdGNXRkRUV2hsT0lJQkMzcHVjemd6TUZsc01XSXdnZ0VMYWpsMU5teHJjSFJvWTNPQ0FRdEdhbnBOVUd4WllUUjJVWUlCQzJkaVkxcFZaWEJXYm5Nd2dnRUxkREl0YVc5S2VYUkpWWE9DQVF0SVVERlpXRVJIYkdSVmE0SUJDMWx0ZHpkQmEzaEdRWGRGZ2dFTFJFSkxkbUZoTURCcVR6ZyUzRBiB4OgYIgtzZWFyY2gtZmVlZA%3D%3D"
+        }
+    }
+}
