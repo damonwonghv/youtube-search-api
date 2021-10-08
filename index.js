@@ -192,7 +192,8 @@ let VideoRender=(json)=>{
             let title=videoRenderer.title.runs[0].text;
             let shortBylineText = (videoRenderer.shortBylineText)?videoRenderer.shortBylineText:'';
             let lengthText=(videoRenderer.lengthText)?videoRenderer.lengthText:'';
-            return { id: id, type: 'video', thumbnail: thumbnail, title: title, shortBylineText:shortBylineText, length: lengthText,isLive:isLive };
+            let channelTitle=videoRenderer.ownerText.runs[0].text
+            return { id: id, type: 'video', thumbnail: thumbnail, title: title, channelTitle: channelTitle, shortBylineText:shortBylineText, length: lengthText,isLive:isLive };
         }else{
             return {};
         }
