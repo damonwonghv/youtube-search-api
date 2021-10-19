@@ -1,6 +1,6 @@
 {
   "name": "youtube-search-api",
-  "version": "1.0.11",
+  "version": "1.0.10",
   "description": "Node.js easy to get Youtube results with playlist by provided keywords, no Login or API key required!",
   "main": "index.js",
   "scripts": {
