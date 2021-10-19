@@ -11,11 +11,11 @@ npm install youtube-search-api
 ## Usage (import)
 
 ```node
-var youtubesearchapi=require('youtube-search-api');
+const youtubesearchapi=require('youtube-search-api');
 ```
 ## GetListByKeywords (Promise)
 ```node
-youtubesearchapi.GetListByKeyword("<keywords>",[playlist boolean])
+youtubesearchapi.GetListByKeyword("<keywords>",[playlist boolean],[limit number])
 ```
 GetListByKeywords Result
 ```node
@@ -24,7 +24,7 @@ GetListByKeywords Result
 "items" is the array from youtube, "nextPage" needs to pass when going to the next page. If playlist arg is true, will return ```type:'playlist'``` but the ```videos:[]``` property will not return the whole videos in the list, need to call ```GetPlaylistData``` to get real playlist's videos. Item with Video type will return ```isLive=[true/false]``` to identify live video or not.
 ## NextPage (Promise)
 ```node
-youtubesearchapi.NextPage(<nextPage from GetListByKeywords result>,[playlist boolean])
+youtubesearchapi.NextPage(<nextPage from GetListByKeywords result>,[playlist boolean],[limit number])
 ```
 NextPage Result
 ```node
@@ -34,7 +34,7 @@ Item with Video type will return ```isLive=[true/false]``` to identify live vide
 
 ## Playlist with ID (Promise)
 ```node
-youtubesearchapi.GetPlaylistData(<Playlist Id>)
+youtubesearchapi.GetPlaylistData(<Playlist Id>,[limit number])
 ```
 Playlist Result
 ```node
@@ -43,7 +43,7 @@ Playlist Result
 
 ## Get Suggest Data (Promise)
 ```node
-youtubesearchapi.GetSuggestData()
+youtubesearchapi.GetSuggestData([limit number])
 ```
 Suggest Data Result
 ```node
@@ -75,7 +75,12 @@ Please make sure to update tests as appropriate.
 1. Support front-end (Vue, React) (On going)
 
 ## Bug fixed
-This version 1.0.10 may fix the issue of live video detect, report by user.
+
+## Update
+1. channelTitle add into return items. (by SirBob01) (https://github.com/SirBob01)
+2. Implemented results limit parameter for all functions (by ElyasAsmad) (https://github.com/ElyasAsmad)
+3. async/await implemented
+
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
