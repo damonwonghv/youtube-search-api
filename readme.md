@@ -63,6 +63,37 @@ Channel Data Results
 ```
 Will return tabs in array format.
 
+## Get Video Details with suggestion
+GetVideoDetails
+
+```node
+youtubesearchapi.GetVideoDetails(<video ID>)
+
+```
+Get Video Details Results
+```node
+{
+  title: "",
+  isLive: [true/false],
+  channel: ",
+  description: ",
+  suggestion: [
+    {id: "",
+      type: 'video',
+      thumbnail: [],
+      title: "",
+      channelTitle: "",
+      shortBylineText: "",
+      length: [Object],
+      isLive: [true/false]
+    } ...
+  ]
+}
+```
+
+Will return video details in Json format.
+
+
 ## Message
 If you want to work with me to fix bug or implement new idea. You are available to send me some new idea of this project.
 
@@ -72,14 +103,15 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 Please make sure to update tests as appropriate.
 
 ## TODO
-1. Support front-end (Vue, React) (On going)
+1. Web app with show case
+2. Support front-end (Vue, React) (Still on going ...)
+
 
 ## Bug fixed
 
 ## Update
-1. channelTitle add into return items. (by SirBob01) (https://github.com/SirBob01)
-2. Implemented results limit parameter for all functions (by ElyasAsmad) (https://github.com/ElyasAsmad)
-3. async/await implemented
+
+1. Added Get Video Details with suggestion
 
 
 ## License
