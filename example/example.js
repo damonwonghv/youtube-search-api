@@ -1,7 +1,7 @@
 const youtube = require("../index");
-/*
+
 youtube
-  .GetListByKeyword("JS Developer", true, 2)
+  .GetListByKeyword("JSDeveloper", true, 2, [{ type: "video" }])
   .then((res) => {
     console.log("Page1");
     console.log(res);
@@ -56,7 +56,7 @@ youtube
   .catch((err) => {
     console.log(err);
   });
-*/
+
 youtube
   .GetVideoDetails("cC2UqBuFAEY")
   .then((result) => {

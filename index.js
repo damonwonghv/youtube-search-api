@@ -6,6 +6,7 @@ const GetYoutubeInitData = async (url) => {
   var apiToken = await null;
   var context = await null;
   try {
+    console.log(encodeURI(url));
     const page = await axios.get(encodeURI(url));
     const ytInitData = await page.data.split("var ytInitialData =");
     if (ytInitData && ytInitData.length > 1) {
@@ -37,10 +38,36 @@ const GetYoutubeInitData = async (url) => {
   }
 };
 
-const GetData = async (keyword, withPlaylist = false, limit = 0) => {
-  const endpoint = await `${youtubeEndpoint}/results?search_query=${keyword}`;
-
+const GetData = async (
+  keyword,
+  withPlaylist = false,
+  limit = 0,
+  options = []
+) => {
+  let endpoint = await `${youtubeEndpoint}/results?search_query=${keyword}`;
   try {
+    if (Array.isArray(options) && options.length > 0) {
+      const type = options.find((z) => z.type);
+      if (typeof type == "object") {
+        if (typeof type.type == "string") {
+          switch (type.type.toLowerCase()) {
+            case "video":
+              endpoint = `${endpoint}&sp=EgIQAQ%3D%3D`;
+              break;
+            case "channel":
+              endpoint = `${endpoint}&sp=EgIQAg%3D%3D`;
+              break;
+            case "playlist":
+              endpoint = `${endpoint}&sp=EgIQAw%3D%3D`;
+              break;
+            case "movie":
+              endpoint = `${endpoint}&sp=EgIQBA%3D%3D`;
+              break;
+          }
+        }
+      }
+    }
+    console.log(endpoint);
     const page = await GetYoutubeInitData(endpoint);
 
     const sectionListRenderer = await page.initdata.contents
