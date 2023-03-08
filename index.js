@@ -270,10 +270,7 @@ const GetVideoDetails = async (videoId) => {
         ? firstContent.viewCount.videoViewCountRenderer.isLive
         : false,
       channel: secondContent.owner.videoOwnerRenderer.title.runs[0].text,
-      description: secondContent.description.runs
-        .map((x) => x.text)
-        .join()
-        .toString(),
+      description: secondContent.attributedDescription.content,
       suggestion: result.secondaryResults.secondaryResults.results
         .filter((y) => y.hasOwnProperty("compactVideoRenderer"))
         .map((x) => compactVideoRenderer(x)),
