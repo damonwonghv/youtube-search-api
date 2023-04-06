@@ -3,8 +3,10 @@
   "version": "1.1.1",
   "description": "Node.js easy to get Youtube results with playlist by provided keywords, no Login or API key required!",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tsc --noEmit",
+    "build": "tsc -p ."
   },
   "repository": {
     "type": "git",
@@ -30,7 +32,10 @@
     "url": "https://github.com/damonwonghv/youtube-search-api/issues"
   },
   "homepage": "https://github.com/damonwonghv/youtube-search-api#readme",
-  "dependencies": {
-    "axios": "^0.21.0"
+  "devDependencies": {
+    "@types/node": "^18.15.10",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.0.3"
   }
 }
