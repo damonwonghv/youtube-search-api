@@ -1,3 +1,9 @@
 node_modules/
 package-lock.json
+*-lock.*
+*.lock
+.*-debug.log
+*.tsbuildinfo
+index.js
+index.d.ts
 .prettierrc
