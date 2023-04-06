@@ -34,7 +34,6 @@ const GetYoutubeInitData = async (url: string) => {
   var initdata: any = {}
   var apiToken = null
   var context = null
-  console.log(encodeURI(url))
   const page = await axios.get(encodeURI(url))
 
   const ytInitData = page.data.split('var ytInitialData =')
@@ -197,7 +196,6 @@ export const GetListByKeyword = async (
       }
     }
   }
-  console.log(endpoint)
   const page = await GetYoutubeInitData(endpoint)
 
   const sectionListRenderer =
