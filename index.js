@@ -6,7 +6,6 @@ const GetYoutubeInitData = async (url) => {
   var apiToken = await null;
   var context = await null;
   try {
-    console.log(encodeURI(url));
     const page = await axios.get(encodeURI(url));
     const ytInitData = await page.data.split("var ytInitialData =");
     if (ytInitData && ytInitData.length > 1) {
@@ -67,7 +66,6 @@ const GetData = async (
         }
       }
     }
-    console.log(endpoint);
     const page = await GetYoutubeInitData(endpoint);
 
     const sectionListRenderer = await page.initdata.contents
