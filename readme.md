@@ -141,14 +141,15 @@ Please make sure to update tests as appropriate.
 ## TODO
 
 1. Web app with show case
-2. Support front-end (Vue, React) (Still on going ...)
-3. Typescript version
+2. Typescript version (Contributor is working on)
+3. Search for shorts (Planning)
+4. Support front-end (Vue, React) (Still on going ...)
 
 ## Bug fixed
 
 ## Update
 
-1. Get List By Keywords support options with type
+1. Silence console log
 
 ## License
 
