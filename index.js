@@ -88,7 +88,7 @@ const GetData = async (
               id: channelRenderer.channelId,
               type: "channel",
               thumbnail: channelRenderer.thumbnail,
-              title: channelRenderer.title.simpleText,
+              title: channelRenderer.title.simpleText
             });
           } else {
             let videoRender = item.videoRenderer;
@@ -107,7 +107,7 @@ const GetData = async (
                   length: playListRender.videoCount,
                   videos: playListRender.videos,
                   videoCount: playListRender.videoCount,
-                  isLive: false,
+                  isLive: false
                 });
               }
             }
@@ -121,7 +121,7 @@ const GetData = async (
     const itemsResult = limit != 0 ? items.slice(0, limit) : items;
     return await Promise.resolve({
       items: itemsResult,
-      nextPage: { nextPageToken: apiToken, nextPageContext: nextPageContext },
+      nextPage: { nextPageToken: apiToken, nextPageContext: nextPageContext }
     });
   } catch (ex) {
     await console.error(ex);
@@ -156,7 +156,7 @@ const nextPage = async (nextPage, withPlaylist = false, limit = 0) => {
                 thumbnail: playListRender.thumbnails,
                 title: playListRender.title.simpleText,
                 length: playListRender.videoCount,
-                videos: GetPlaylistData(playListRender.playlistId),
+                videos: GetPlaylistData(playListRender.playlistId)
               });
             }
           }
@@ -271,7 +271,7 @@ const GetVideoDetails = async (videoId) => {
       description: secondContent.attributedDescription.content,
       suggestion: result.secondaryResults.secondaryResults.results
         .filter((y) => y.hasOwnProperty("compactVideoRenderer"))
-        .map((x) => compactVideoRenderer(x)),
+        .map((x) => compactVideoRenderer(x))
     };
 
     return await Promise.resolve(res);
@@ -331,7 +331,7 @@ const VideoRender = (json) => {
         channelTitle,
         shortBylineText,
         length: lengthText,
-        isLive,
+        isLive
       };
     } else {
       return {};
@@ -362,9 +362,32 @@ const compactVideoRenderer = (json) => {
     channelTitle: compactVideoRendererJson.shortBylineText.runs[0].text,
     shortBylineText: compactVideoRendererJson.shortBylineText.runs[0].text,
     length: compactVideoRendererJson.lengthText,
-    isLive,
+    isLive
   };
   return result;
+};
+
+const GetShortVideo = async () => {
+  const page = await GetYoutubeInitData(youtubeEndpoint);
+  const shortResult =
+    await page.initdata.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.richGridRenderer.contents
+      .filter((x) => {
+        return x.richSectionRenderer;
+      })
+      .map((z) => z.richSectionRenderer.content)
+      .filter((y) => y.richShelfRenderer)
+      .map((u) => u.richShelfRenderer)
+      .find((i) => i.title.runs[0].text == "Shorts");
+  const res = await shortResult.contents
+    .map((z) => z.richItemRenderer)
+    .map((y) => y.content.reelItemRenderer);
+  return await res.map((json) => ({
+    id: json.videoId,
+    type: "reel",
+    thumbnail: json.thumbnail.thumbnails[0],
+    title: json.headline.simpleText,
+    inlinePlaybackEndpoint: json.inlinePlaybackEndpoint || {}
+  }));
 };
 
 exports.GetListByKeyword = GetData;
@@ -373,3 +396,4 @@ exports.GetPlaylistData = GetPlaylistData;
 exports.GetSuggestData = GetSuggestData;
 exports.GetChannelById = GetChannelById;
 exports.GetVideoDetails = GetVideoDetails;
+exports.GetShortVideo = GetShortVideo;

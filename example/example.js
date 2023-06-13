@@ -65,3 +65,12 @@ youtube
   .catch((err) => {
     console.error(err);
   });
+
+youtube
+  .GetShortVideo()
+  .then((shortVideoResult) => {
+    console.log(shortVideoResult);
+  })
+  .catch((err) => {
+    console.log(err);
+  });

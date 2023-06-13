@@ -128,6 +128,42 @@ Get Video Details Results
 
 Will return video details in Json format.
 
+## Get Short Video List (Beta)
+
+Only return short video from suggestion.
+
+GetShortVideo
+
+```node
+youtubesearchapi.GetShortVideo()
+
+```
+
+Get Short Video List Results
+
+```node
+[
+  {
+    id: "",
+    type: "reel",
+    thumbnail: {
+      url: '',
+      width: 405, //only return 405
+      height: 720 //only return 720
+    },
+    title: '',
+    inlinePlaybackEndpoint: {} //may not return all the time
+  }
+]
+```
+
+Will return Short Video list in Json Array format.
+
+### Limitation:
+1. Only return short video from suggestion.
+2. inlinePlaybackEndpoint facing async issue.
+3. Only return first page of short video.
+
 ## Message
 
 If you want to work with me to fix bug or implement new idea. You are available to send me some new idea of this project.
@@ -142,14 +178,13 @@ Please make sure to update tests as appropriate.
 
 1. Web app with show case
 2. Typescript version (Contributor is working on)
-3. Search for shorts (Planning)
-4. Support front-end (Vue, React) (Still on going ...)
+3. Support front-end (Vue, React) (Still on going ...)
 
 ## Bug fixed
 
 ## Update
 
-1. Silence console log
+1. Search for shorts (Limitation)
 
 ## License
 
