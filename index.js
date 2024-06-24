@@ -37,6 +37,25 @@ const GetYoutubeInitData = async (url) => {
   }
 };
 
+const GetYoutubePlayerDetail = async (url) => {
+  var initdata = await {};
+  try {
+    const page = await axios.get(encodeURI(url));
+    const ytInitData = await page.data.split("var ytInitialPlayerResponse =");
+    if (ytInitData && ytInitData.length > 1) {
+      const data = await ytInitData[1].split("</script>")[0].slice(0, -1);
+      initdata = await JSON.parse(data);
+      return await Promise.resolve({ ...initdata.videoDetails });
+    } else {
+      console.error("cannot_get_player_data");
+      return await Promise.reject("cannot_get_player_data");
+    }
+  } catch (ex) {
+    await console.error(ex);
+    return await Promise.reject(ex);
+  }
+};
+
 const GetData = async (
   keyword,
   withPlaylist = false,
@@ -255,20 +274,28 @@ const GetVideoDetails = async (videoId) => {
   const endpoint = await `${youtubeEndpoint}/watch?v=${videoId}`;
   try {
     const page = await GetYoutubeInitData(endpoint);
+    const playerData = await GetYoutubePlayerDetail(endpoint);
+
     const result = await page.initdata.contents.twoColumnWatchNextResults;
     const firstContent = await result.results.results.contents[0]
       .videoPrimaryInfoRenderer;
     const secondContent = await result.results.results.contents[1]
       .videoSecondaryInfoRenderer;
     const res = await {
+      id: playerData.videoId,
       title: firstContent.title.runs[0].text,
+      thumbnail: playerData.thumbnail,
       isLive: firstContent.viewCount.videoViewCountRenderer.hasOwnProperty(
         "isLive"
       )
         ? firstContent.viewCount.videoViewCountRenderer.isLive
         : false,
-      channel: secondContent.owner.videoOwnerRenderer.title.runs[0].text,
-      description: secondContent.attributedDescription.content,
+      channel:
+        playerData.author ||
+        secondContent.owner.videoOwnerRenderer.title.runs[0].text,
+      channelId: playerData.channelId,
+      description: playerData.shortDescription,
+      keywords: playerData.keywords,
       suggestion: result.secondaryResults.secondaryResults.results
         .filter((y) => y.hasOwnProperty("compactVideoRenderer"))
         .map((x) => compactVideoRenderer(x))

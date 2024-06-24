@@ -108,10 +108,14 @@ Get Video Details Results
 
 ```node
 {
+  id:"",
   title: "",
+  thumbnail:[],
   isLive: [true/false],
-  channel: ",
-  description: ",
+  channel: "",
+  channelId:"",
+  description: "",
+  keywords:[],
   suggestion: [
     {id: "",
       type: 'video',
