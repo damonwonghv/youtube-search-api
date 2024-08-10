@@ -3,7 +3,9 @@ const youtubeEndpoint = `https://www.youtube.com`;
 
 let customAxios = null
 function setAxios( axs ){
-  customAxios = axs
+  if(axs.request && axs._request)
+    customAxios = axs
+  else throw new Error('This is not an axios instance')
 }
 
 function getAxios(){
