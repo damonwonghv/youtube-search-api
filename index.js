@@ -1,12 +1,22 @@
 const axios = require("axios");
 const youtubeEndpoint = `https://www.youtube.com`;
 
+let customAxios = null
+function setAxios( axs ){
+  customAxios = axs
+}
+
+function getAxios(){
+  return customAxios || axios
+}
+
+
 const GetYoutubeInitData = async (url) => {
   var initdata = await {};
   var apiToken = await null;
   var context = await null;
   try {
-    const page = await axios.get(encodeURI(url));
+    const page = await getAxios().get(encodeURI(url));
     const ytInitData = await page.data.split("var ytInitialData =");
     if (ytInitData && ytInitData.length > 1) {
       const data = await ytInitData[1].split("</script>")[0].slice(0, -1);
@@ -40,7 +50,7 @@ const GetYoutubeInitData = async (url) => {
 const GetYoutubePlayerDetail = async (url) => {
   var initdata = await {};
   try {
-    const page = await axios.get(encodeURI(url));
+    const page = await getAxios().get(encodeURI(url));
     const ytInitData = await page.data.split("var ytInitialPlayerResponse =");
     if (ytInitData && ytInitData.length > 1) {
       const data = await ytInitData[1].split("</script>")[0].slice(0, -1);
@@ -152,7 +162,7 @@ const nextPage = async (nextPage, withPlaylist = false, limit = 0) => {
   const endpoint =
     await `${youtubeEndpoint}/youtubei/v1/search?key=${nextPage.nextPageToken}`;
   try {
-    const page = await axios.post(
+    const page = await getAxios().post(
       encodeURI(endpoint),
       nextPage.nextPageContext
     );
@@ -417,6 +427,7 @@ const GetShortVideo = async () => {
   }));
 };
 
+exports.setAxios = setAxios
 exports.GetListByKeyword = GetData;
 exports.NextPage = nextPage;
 exports.GetPlaylistData = GetPlaylistData;
