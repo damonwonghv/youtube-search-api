@@ -4,6 +4,7 @@
   "description": "Node.js easy to get Youtube results with playlist by provided keywords, no Login or API key required!",
   "main": "index.js",
   "scripts": {
+    "format": "prettier --write index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
