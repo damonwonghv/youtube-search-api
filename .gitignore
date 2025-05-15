@@ -1,2 +1,14 @@
+# npm packages
 node_modules/
 package-lock.json
+pnpm-lock.yaml
+*.tgz
+
+# typescript output
+index.d.ts
+index.js
+example/test.d.ts
+example/test.js
+
+# sample data
+res/

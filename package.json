@@ -3,7 +3,13 @@
   "version": "1.2.2",
   "description": "Node.js easy to get Youtube results with playlist by provided keywords, no Login or API key required!",
   "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
   "scripts": {
+    "build": "tsc",
     "format": "prettier --write index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -35,6 +41,9 @@
     "axios": "^0.21.0"
   },
   "devDependencies": {
-    "prettier": "^3.5.3"
+    "@types/node": "^22.15.3",
+    "prettier": "^3.5.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   }
 }
