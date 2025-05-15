@@ -341,7 +341,24 @@ export type YoutubeChannelResult = {
       contents: {
         itemSectionRenderer: {
           contents: {
-            shelfRenderer: {
+            channelVideoPlayerRenderer?: {
+              videoId: string
+              title: { runs: { text: string }[] }
+              description: { runs: { text: string }[] }
+              viewCountText: {
+                /** e.g. "收看次數：52,710 次" */
+                simpleText: string
+              }
+              publishedTimeText: {
+                runs: [
+                  {
+                    /** e.g. "5 年前" */
+                    text: string
+                  },
+                ]
+              }
+            }
+            shelfRenderer?: {
               title: { runs: { text: string }[] }
               content: {
                 horizontalListRenderer: {
