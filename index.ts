@@ -97,12 +97,12 @@ const GetYoutubeInitData = async (url: string) => {
   var apiToken = null
   var context = null
   const page = await axios.get(encodeURI(url))
-  const ytInitData = await page.data.split('var ytInitialData =')
+  const ytInitData = page.data.split('var ytInitialData =')
   if (ytInitData && ytInitData.length > 1) {
-    const data = await ytInitData[1].split('</script>')[0].slice(0, -1)
+    const data = ytInitData[1].split('</script>')[0].slice(0, -1)
 
     if (page.data.split('innertubeApiKey').length > 0) {
-      apiToken = await page.data
+      apiToken = page.data
         .split('innertubeApiKey')[1]
         .trim()
         .split(',')[0]
@@ -124,9 +124,9 @@ const GetYoutubeInitData = async (url: string) => {
 
 const GetYoutubePlayerDetail = async (url: string) => {
   const page = await axios.get(encodeURI(url))
-  const ytInitData = await page.data.split('var ytInitialPlayerResponse =')
+  const ytInitData = page.data.split('var ytInitialPlayerResponse =')
   if (ytInitData && ytInitData.length > 1) {
-    const data = await ytInitData[1].split('</script>')[0].slice(0, -1)
+    const data = ytInitData[1].split('</script>')[0].slice(0, -1)
     let initdata = JSON.parse(data)
     return { ...initdata.videoDetails }
   } else {
@@ -165,7 +165,7 @@ export const GetListByKeyword = async (
   const page = await GetYoutubeInitData(endpoint)
 
   const sectionListRenderer =
-    await page.initdata.contents.twoColumnSearchResultsRenderer.primaryContents
+    page.initdata.contents.twoColumnSearchResultsRenderer.primaryContents
       .sectionListRenderer
 
   let contToken: string | undefined
