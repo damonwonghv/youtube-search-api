@@ -2,9 +2,9 @@ const axios = require("axios");
 const youtubeEndpoint = `https://www.youtube.com`;
 
 const GetYoutubeInitData = async (url) => {
-  var initdata = await {};
-  var apiToken = await null;
-  var context = await null;
+  var initdata = {};
+  var apiToken = null;
+  var context = null;
   try {
     const page = await axios.get(encodeURI(url));
     const ytInitData = await page.data.split("var ytInitialData =");
@@ -20,39 +20,39 @@ const GetYoutubeInitData = async (url) => {
       }
 
       if (page.data.split("INNERTUBE_CONTEXT").length > 0) {
-        context = await JSON.parse(
+        context = JSON.parse(
           page.data.split("INNERTUBE_CONTEXT")[1].trim().slice(2, -2)
         );
       }
 
-      initdata = await JSON.parse(data);
-      return await Promise.resolve({ initdata, apiToken, context });
+      initdata = JSON.parse(data);
+      return { initdata, apiToken, context };
     } else {
       console.error("cannot_get_init_data");
-      return await Promise.reject("cannot_get_init_data");
+      throw new Error("cannot_get_init_data");
     }
   } catch (ex) {
-    await console.error(ex);
-    return await Promise.reject(ex);
+    console.error(ex);
+    throw ex;
   }
 };
 
 const GetYoutubePlayerDetail = async (url) => {
-  var initdata = await {};
+  var initdata = {};
   try {
     const page = await axios.get(encodeURI(url));
     const ytInitData = await page.data.split("var ytInitialPlayerResponse =");
     if (ytInitData && ytInitData.length > 1) {
       const data = await ytInitData[1].split("</script>")[0].slice(0, -1);
-      initdata = await JSON.parse(data);
-      return await Promise.resolve({ ...initdata.videoDetails });
+      initdata = JSON.parse(data);
+      return { ...initdata.videoDetails };
     } else {
       console.error("cannot_get_player_data");
-      return await Promise.reject("cannot_get_player_data");
+      throw new Error("cannot_get_player_data");
     }
   } catch (ex) {
-    await console.error(ex);
-    return await Promise.reject(ex);
+    console.error(ex);
+    throw ex;
   }
 };
 
@@ -62,7 +62,7 @@ const GetData = async (
   limit = 0,
   options = []
 ) => {
-  let endpoint = await `${youtubeEndpoint}/results?search_query=${keyword}`;
+  let endpoint = `${youtubeEndpoint}/results?search_query=${keyword}`;
   try {
     if (Array.isArray(options) && options.length > 0) {
       const type = options.find((z) => z.type);
@@ -90,11 +90,11 @@ const GetData = async (
     const sectionListRenderer = await page.initdata.contents
       .twoColumnSearchResultsRenderer.primaryContents.sectionListRenderer;
 
-    let contToken = await {};
+    let contToken = {};
 
-    let items = await [];
+    let items = [];
 
-    await sectionListRenderer.contents.forEach((content) => {
+    sectionListRenderer.contents.forEach((content) => {
       if (content.continuationItemRenderer) {
         contToken =
           content.continuationItemRenderer.continuationEndpoint
@@ -134,23 +134,23 @@ const GetData = async (
         });
       }
     });
-    const apiToken = await page.apiToken;
-    const context = await page.context;
-    const nextPageContext = await { context: context, continuation: contToken };
+    const apiToken = page.apiToken;
+    const context = page.context;
+    const nextPageContext = { context, continuation: contToken };
     const itemsResult = limit != 0 ? items.slice(0, limit) : items;
-    return await Promise.resolve({
+    return {
       items: itemsResult,
       nextPage: { nextPageToken: apiToken, nextPageContext: nextPageContext }
-    });
+    };
   } catch (ex) {
-    await console.error(ex);
-    return await Promise.reject(ex);
+    console.error(ex);
+    throw ex;
   }
 };
 
 const nextPage = async (nextPage, withPlaylist = false, limit = 0) => {
   const endpoint =
-    await `${youtubeEndpoint}/youtubei/v1/search?key=${nextPage.nextPageToken}`;
+    `${youtubeEndpoint}/youtubei/v1/search?key=${nextPage.nextPageToken}`;
   try {
     const page = await axios.post(
       encodeURI(endpoint),
@@ -186,52 +186,52 @@ const nextPage = async (nextPage, withPlaylist = false, limit = 0) => {
       }
     });
     const itemsResult = limit != 0 ? items.slice(0, limit) : items;
-    return await Promise.resolve({ items: itemsResult, nextPage: nextPage });
+    return { items: itemsResult, nextPage: nextPage };
   } catch (ex) {
-    await console.error(ex);
-    return await Promise.reject(ex);
+    console.error(ex);
+    throw ex;
   }
 };
 
 const GetPlaylistData = async (playlistId, limit = 0) => {
-  const endpoint = await `${youtubeEndpoint}/playlist?list=${playlistId}`;
+  const endpoint = `${youtubeEndpoint}/playlist?list=${playlistId}`;
   try {
     const initData = await GetYoutubeInitData(endpoint);
-    const sectionListRenderer = await initData.initdata;
-    const metadata = await sectionListRenderer.metadata;
+    const sectionListRenderer = initData.initdata;
+    const metadata = sectionListRenderer.metadata;
     if (sectionListRenderer && sectionListRenderer.contents) {
-      const videoItems = await sectionListRenderer.contents
+      const videoItems = sectionListRenderer.contents
         .twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content
         .sectionListRenderer.contents[0].itemSectionRenderer.contents[0]
         .playlistVideoListRenderer.contents;
-      let items = await [];
-      await videoItems.forEach((item) => {
+      let items = [];
+      videoItems.forEach((item) => {
         let videoRender = item.playlistVideoRenderer;
         if (videoRender && videoRender.videoId) {
           items.push(VideoRender(item));
         }
       });
       const itemsResult = limit != 0 ? items.slice(0, limit) : items;
-      return await Promise.resolve({ items: itemsResult, metadata: metadata });
+      return { items: itemsResult, metadata };
     } else {
-      return await Promise.reject("invalid_playlist");
+      throw new Error("invalid_playlist");
     }
   } catch (ex) {
-    await console.error(ex);
-    return await Promise.reject(ex);
+    console.error(ex);
+    throw ex;
   }
 };
 
 const GetSuggestData = async (limit = 0) => {
-  const endpoint = await `${youtubeEndpoint}`;
+  const endpoint = `${youtubeEndpoint}`;
   try {
     const page = await GetYoutubeInitData(endpoint);
-    const sectionListRenderer = await page.initdata.contents
+    const sectionListRenderer = page.initdata.contents
       .twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content
       .richGridRenderer.contents;
-    let items = await [];
-    let otherItems = await [];
-    await sectionListRenderer.forEach((item) => {
+    let items = [];
+    let otherItems = [];
+    sectionListRenderer.forEach((item) => {
       if (item.richItemRenderer && item.richItemRenderer.content) {
         let videoRender = item.richItemRenderer.content.videoRenderer;
         if (videoRender && videoRender.videoId) {
@@ -242,15 +242,15 @@ const GetSuggestData = async (limit = 0) => {
       }
     });
     const itemsResult = limit != 0 ? items.slice(0, limit) : items;
-    return await Promise.resolve({ items: itemsResult });
+    return { items: itemsResult };
   } catch (ex) {
-    await console.error(ex);
-    return await Promise.reject(ex);
+    console.error(ex);
+    throw ex;
   }
 };
 
 const GetChannelById = async (channelId) => {
-  const endpoint = await `${youtubeEndpoint}/channel/${channelId}`;
+  const endpoint = `${youtubeEndpoint}/channel/${channelId}`;
   try {
     const page = await GetYoutubeInitData(endpoint);
     const tabs = page.initdata.contents.twoColumnBrowseResultsRenderer.tabs;
@@ -264,24 +264,25 @@ const GetChannelById = async (channelId) => {
         }
       })
       .filter((y) => typeof y != "undefined");
-    return await Promise.resolve(items);
+    return items;
   } catch (ex) {
-    return await Promise.reject(ex);
+    console.error(ex);
+    throw ex;
   }
 };
 
 const GetVideoDetails = async (videoId) => {
-  const endpoint = await `${youtubeEndpoint}/watch?v=${videoId}`;
+  const endpoint = `${youtubeEndpoint}/watch?v=${videoId}`;
   try {
     const page = await GetYoutubeInitData(endpoint);
     const playerData = await GetYoutubePlayerDetail(endpoint);
 
-    const result = await page.initdata.contents.twoColumnWatchNextResults;
-    const firstContent = await result.results.results.contents[0]
+    const result = page.initdata.contents.twoColumnWatchNextResults;
+    const firstContent = result.results.results.contents[0]
       .videoPrimaryInfoRenderer;
-    const secondContent = await result.results.results.contents[1]
+    const secondContent = result.results.results.contents[1]
       .videoSecondaryInfoRenderer;
-    const res = await {
+    const res = {
       id: playerData.videoId,
       title: firstContent.title.runs[0].text,
       thumbnail: playerData.thumbnail,
@@ -301,9 +302,10 @@ const GetVideoDetails = async (videoId) => {
         .map((x) => compactVideoRenderer(x))
     };
 
-    return await Promise.resolve(res);
+    return res;
   } catch (ex) {
-    return await Promise.reject(ex);
+    console.error(ex);
+    throw ex;
   }
 };
 
@@ -364,6 +366,7 @@ const VideoRender = (json) => {
       return {};
     }
   } catch (ex) {
+    console.error(ex);
     throw ex;
   }
 };
@@ -397,7 +400,7 @@ const compactVideoRenderer = (json) => {
 const GetShortVideo = async () => {
   const page = await GetYoutubeInitData(youtubeEndpoint);
   const shortResult =
-    await page.initdata.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.richGridRenderer.contents
+    page.initdata.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.richGridRenderer.contents
       .filter((x) => {
         return x.richSectionRenderer;
       })
@@ -405,10 +408,10 @@ const GetShortVideo = async () => {
       .filter((y) => y.richShelfRenderer)
       .map((u) => u.richShelfRenderer)
       .find((i) => i.title.runs[0].text == "Shorts");
-  const res = await shortResult.contents
+  const res = shortResult.contents
     .map((z) => z.richItemRenderer)
     .map((y) => y.content.reelItemRenderer);
-  return await res.map((json) => ({
+  return res.map((json) => ({
     id: json.videoId,
     type: "reel",
     thumbnail: json.thumbnail.thumbnails[0],
