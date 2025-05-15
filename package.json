@@ -37,9 +37,7 @@
     "url": "https://github.com/damonwonghv/youtube-search-api/issues"
   },
   "homepage": "https://github.com/damonwonghv/youtube-search-api#readme",
-  "dependencies": {
-    "axios": "^0.21.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^22.15.3",
     "prettier": "^3.5.3",
