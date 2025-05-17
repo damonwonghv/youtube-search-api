@@ -37,9 +37,9 @@
     "url": "https://github.com/damonwonghv/youtube-search-api/issues"
   },
   "homepage": "https://github.com/damonwonghv/youtube-search-api#readme",
-  "dependencies": {},
   "devDependencies": {
     "@types/node": "^22.15.3",
+    "gen-ts-type": "^2.0.0",
     "prettier": "^3.5.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"

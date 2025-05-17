@@ -334,109 +334,272 @@ export const GetSuggestData = async (
   return { items: itemsResult }
 }
 
-export type YoutubeChannelResult = {
-  title: string
+export type YoutubeChannelResult = Array<{
+  title: string /** e.g. "主頁" */
   content?: {
     sectionListRenderer: {
-      contents: {
+      contents: Array<{
         itemSectionRenderer: {
-          contents: {
+          contents: Array<{
             channelVideoPlayerRenderer?: {
-              videoId: string
-              title: { runs: { text: string }[] }
-              description: { runs: { text: string }[] }
+              videoId: string /** e.g. "2xKf-zL-r4E" */
+              title: {
+                runs: Array<{
+                  text: string /** e.g. "TRAIN DRIVER'S VIEW: Channel Trailer" */
+                }>
+                accessibility: {
+                  accessibilityData: {
+                    label: string /** e.g. "TRAIN DRIVER'S VIEW: Channel Trailer 55 秒" */
+                  }
+                }
+              }
+              description: {
+                runs: Array<{
+                  text: string /** e.g. "Welcome to my channel. I'm a female train driver/engineer working on the scenic Bergen Line and famous Flåm Railway in Norway.\nI'm bringing you my scenic view from the drivers cab from all seasons and weather in 4K.\n\nMy videos are without music and contains only the pure and raw sound of the engine itself. Enjoy!\n\n🚄Bergen Line information: " */
+                }>
+              }
               viewCountText: {
-                /** e.g. "收看次數：52,710 次" */
-                simpleText: string
+                simpleText: string /** e.g. "收看次數：52,710 次" */
               }
               publishedTimeText: {
-                runs: [
-                  {
-                    /** e.g. "5 年前" */
-                    text: string
-                  },
-                ]
+                runs: Array<{
+                  text: string /** e.g. "5 年前" */
+                }>
               }
             }
+            recognitionShelfRenderer?: {
+              title: {
+                simpleText: string /** e.g. "我們的會員" */
+              }
+              subtitle: {
+                simpleText: string /** e.g. "各位頻道會員，感謝你！" */
+              }
+              avatars: Array<{
+                thumbnails: Array<{
+                  url: string /** e.g. "https://yt3.googleusercontent.com/ytc/AIdro_kpd-e1BKKuax4Ntjpm7bkfcUOr-V5qcGqclpd38rw=s88-c-k-c0x00ffffff-no-rj" */
+                }>
+              }>
+            }
             shelfRenderer?: {
-              title: { runs: { text: string }[] }
+              title: {
+                runs: Array<{
+                  text: string /** e.g. "直播中" */
+                  navigationEndpoint: {
+                    commandMetadata?: {
+                      webCommandMetadata: {
+                        url: string /** e.g. "/@RailCowGirl/videos?view=2&sort=dd&live_view=501&shelf_id=2" */
+                        webPageType: string /** e.g. "WEB_PAGE_TYPE_CHANNEL" */
+                      }
+                    }
+                    browseEndpoint?: {
+                      canonicalBaseUrl: string /** e.g. "/@RailCowGirl" */
+                    }
+                  }
+                }>
+              }
               content: {
                 horizontalListRenderer: {
-                  items: {
-                    gridChannelRenderer: {
-                      /** e.g. 'UCeIU079SsB5QF7sW1XVbiuw' */
-                      channelId: string
+                  items: Array<{
+                    gridVideoRenderer?: {
+                      videoId: string /** e.g. "czoEAKX9aaM" */
                       thumbnail: {
-                        thumbnails: {
-                          /** e.g. '//yt3.googleusercontent.com/fK2iaVBChrhzSfxe92Ee01bHEKVuCrlfoEOPvvwPOFNbq1uMZkC-ee5NwWO0cklsuJtpPZapJk0=s88-c-k-c0x00ffffff-no-rj-mo' */
-                          url: string
-                          /** e.g. 88 */
-                          width: number
-                          /** e.g. 88 */
-                          height: number
-                        }[]
+                        thumbnails: Array<{
+                          url: string /** e.g. "https://i.ytimg.com/vi/czoEAKX9aaM/hqdefault.jpg?v=6727db6c&sqp=-oaymwEiCKgBEF5IWvKriqkDFQgBFQAAAAAYASUAAMhCPQCAokN4AQ==&rs=AOn4CLCprwxkBHpZcd0XlIV0Cr7bAWM4jg" */
+                          width: number /** e.g. 168 */
+                          height: number /** e.g. 94 */
+                        }>
+                      }
+                      title: {
+                        accessibility: {
+                          accessibilityData: {
+                            label: string /** e.g. "The Best Of Norway's Railway WINTER Cab Views" */
+                          }
+                        }
+                        simpleText: string /** e.g. "The Best Of Norway's Railway WINTER Cab Views" */
+                      }
+                      viewCountText: {
+                        runs?: Array<{
+                          text: string /** e.g. "198" */
+                        }>
+                        simpleText?: string /** e.g. "收看次數：76,886 次" */
+                      }
+                      ownerBadges: Array<{
+                        metadataBadgeRenderer: {
+                          icon: {
+                            iconType: string /** e.g. "CHECK_CIRCLE_THICK" */
+                          }
+                          style: string /** e.g. "BADGE_STYLE_TYPE_VERIFIED" */
+                          tooltip: string /** e.g. "已驗證" */
+                          accessibilityData: {
+                            label: string /** e.g. "已驗證" */
+                          }
+                        }
+                      }>
+                      thumbnailOverlays: Array<{
+                        thumbnailOverlayTimeStatusRenderer?: {
+                          text: {
+                            runs?: Array<{
+                              text: string /** e.g. "直播" */
+                            }>
+                            accessibility: {
+                              accessibilityData: {
+                                label: string /** e.g. "直播" */
+                              }
+                            }
+                            simpleText?: string /** e.g. "1:36:59" */
+                          }
+                          style: string /** e.g. "LIVE" */
+                          icon?: {
+                            iconType: string /** e.g. "LIVE" */
+                          }
+                        }
+                      }>
+                      publishedTimeText?: {
+                        simpleText: string /** e.g. "1 個月前" */
+                      }
+                    }
+                    lockupViewModel?: {
+                      contentImage: {
+                        collectionThumbnailViewModel: {
+                          primaryThumbnail: {
+                            thumbnailViewModel: {
+                              image: {
+                                sources: Array<{
+                                  url: string /** e.g. "https://i.ytimg.com/vi/NDrhzV8AccI/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLB_HxIshNuhT4aebKDMl3x8Y2v3QA" */
+                                  width: number /** e.g. 480 */
+                                  height: number /** e.g. 270 */
+                                }>
+                              }
+                              overlays: Array<{
+                                thumbnailOverlayBadgeViewModel?: {
+                                  thumbnailBadges: Array<{
+                                    thumbnailBadgeViewModel: {
+                                      icon: {
+                                        sources: Array<{
+                                          clientResource: {
+                                            imageName: string /** e.g. "PLAYLISTS" */
+                                          }
+                                        }>
+                                      }
+                                      text: string /** e.g. "57 部影片" */
+                                    }
+                                  }>
+                                }
+                              }>
+                            }
+                          }
+                        }
+                      }
+                      metadata: {
+                        lockupMetadataViewModel: {
+                          title: {
+                            content: string /** e.g. "Cab View Oslo - Bergen" */
+                          }
+                          metadata: {
+                            contentMetadataViewModel: {
+                              metadataRows: Array<{
+                                metadataParts: Array<{
+                                  text: {
+                                    content: string /** e.g. "RailCowGirl" */
+                                    commandRuns: Array<{
+                                      startIndex: number /** e.g. 0 */
+                                      length: number /** e.g. 11 */
+                                    }>
+                                  }
+                                }>
+                              }>
+                            }
+                          }
+                        }
+                      }
+                      contentId: string /** e.g. "PLqVXtaI0Orw6z3e7q2fe16IE1KsPbbilZ" */
+                      contentType: string /** e.g. "LOCKUP_CONTENT_TYPE_PLAYLIST" */
+                    }
+                    gridChannelRenderer?: {
+                      channelId: string /** e.g. "UCeIU079SsB5QF7sW1XVbiuw" */
+                      thumbnail: {
+                        thumbnails: Array<{
+                          url: string /** e.g. "//yt3.googleusercontent.com/fK2iaVBChrhzSfxe92Ee01bHEKVuCrlfoEOPvvwPOFNbq1uMZkC-ee5NwWO0cklsuJtpPZapJk0=s88-c-k-c0x00ffffff-no-rj-mo" */
+                          width: number /** e.g. 88 */
+                          height: number /** e.g. 88 */
+                        }>
                       }
                       videoCountText: {
-                        /** e.g. '16', ' 部影片' */
-                        runs: {
-                          text: string
-                        }[]
+                        runs: Array<{
+                          text: string /** e.g. "16" */
+                        }>
                       }
                       subscriberCountText: {
                         accessibility: {
                           accessibilityData: {
-                            /** e.g. '989 位訂閱者' */
-                            label: string
+                            label: string /** e.g. "989 位訂閱者" */
                           }
                         }
-                        /** e.g. '989 位訂閱者' */
-                        simpleText: string
-                      }
-                      navigationEndpoint: {
-                        commandMetadata: {
-                          webCommandMetadata: {
-                            /** e.g. '/@RailCowBirds' */
-                            url: string
-                            /** e.g. 'WEB_PAGE_TYPE_CHANNEL' */
-                            webPageType: string
-                          }
-                        }
-                        browseEndpoint: {
-                          /** e.g. 'UCeIU079SsB5QF7sW1XVbiuw' */
-                          browseId: string
-                          /** e.g. '/@RailCowBirds' */
-                          canonicalBaseUrl: string
-                        }
+                        simpleText: string /** e.g. "989 位訂閱者" */
                       }
                       title: {
-                        /** e.g. 'RailCowBirds' */
-                        simpleText: string
-                      }
-                      subscribeButton: {
-                        buttonRenderer: {
-                          style: 'STYLE_COMPACT_GRAY'
-                          size: 'SIZE_DEFAULT'
-                          isDisabled: false
-                          text: {
-                            runs: [
-                              {
-                                text: '訂閱'
-                              },
-                            ]
-                          }
-                        }
+                        simpleText: string /** e.g. "RailCowBirds" */
                       }
                     }
-                  }[]
+                  }>
                 }
               }
             }
-          }[]
+            reelShelfRenderer?: {
+              title: {
+                runs: Array<{
+                  text: string /** e.g. "Shorts" */
+                }>
+              }
+              items: Array<{
+                shortsLockupViewModel: {
+                  entityId: string /** e.g. "shorts-shelf-item-NnOAn-70Pp0" */
+                  accessibilityText: string /** e.g. "Flam Railway Fact  #cabview #FlamRailway #norway #cabview #Queenofslowtv #bergenline #chat, 收看次數：13K 次 - 播 Shorts" */
+                  thumbnail: {
+                    sources: Array<{
+                      url: string /** e.g. "https://i.ytimg.com/vi/NnOAn-70Pp0/oar2.jpg?sqp=-oaymwEkCJUDENAFSFqQAgHyq4qpAxMIARUAAAAAJQAAyEI9AICiQ3gB&rs=AOn4CLDtqRoHzeHOqO_gtbAwKX9k9KRSQQ" */
+                      width: number /** e.g. 405 */
+                      height: number /** e.g. 720 */
+                    }>
+                  }
+                  onTap: {
+                    innertubeCommand: {
+                      commandMetadata: {
+                        webCommandMetadata: {
+                          url: string /** e.g. "/shorts/NnOAn-70Pp0" */
+                          webPageType: string /** e.g. "WEB_PAGE_TYPE_SHORTS" */
+                        }
+                      }
+                      reelWatchEndpoint: {
+                        videoId: string /** e.g. "NnOAn-70Pp0" */
+                        thumbnail: {
+                          thumbnails: Array<{
+                            url: string /** e.g. "https://i.ytimg.com/vi/NnOAn-70Pp0/frame0.jpg" */
+                            width: number /** e.g. 1080 */
+                            height: number /** e.g. 1920 */
+                          }>
+                          isOriginalAspectRatio: boolean /** e.g. true */
+                        }
+                      }
+                    }
+                  }
+                  overlayMetadata: {
+                    primaryText: {
+                      content: string /** e.g. "Flam Railway Fact  #cabview #FlamRailway #norway #cabview #Queenofslowtv #bergenline #chat" */
+                    }
+                    secondaryText: {
+                      content: string /** e.g. "收看次數：13K 次" */
+                    }
+                  }
+                }
+              }>
+            }
+          }>
         }
-      }[]
+      }>
     }
   }
-}[]
+}>
 
 export const GetChannelById = async (
   channelId: string,
