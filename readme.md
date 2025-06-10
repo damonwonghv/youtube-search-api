@@ -14,6 +14,10 @@ npm install youtube-search-api
 const youtubesearchapi = require("youtube-search-api");
 ```
 
+```node
+import youtubesearchapi from "youtube-search-api";
+```
+
 ## GetListByKeywords (Promise)
 
 ```node
@@ -184,8 +188,7 @@ Please make sure to update tests as appropriate.
 ## TODO
 
 1. Web app with show case
-2. Typescript version (Contributor is working on)
-3. Support front-end (Vue, React) (Still on going ...)
+2. Support front-end (Vue, React) (Still on going ...)
 
 ## Bug fixed
 

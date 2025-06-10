@@ -1,4 +1,4 @@
-const youtube = require("../index");
+import youtube from "../dist/index.js";
 
 youtube
   .GetListByKeyword("JSDeveloper", true, 2, [{ type: "video" }])
