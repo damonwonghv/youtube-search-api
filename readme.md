@@ -285,3 +285,7 @@ Please make sure to update tests as appropriate.
 ## Support me
 
 https://www.buymeacoffee.com/damonwcw
+
+## Contact me
+
+damonwcw@outlook.com
