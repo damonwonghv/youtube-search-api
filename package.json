@@ -1,6 +1,6 @@
 {
   "name": "youtube-search-api",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Node.js and TypeScript library to get YouTube search results with playlist by provided keywords, no Login or API key required!",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
