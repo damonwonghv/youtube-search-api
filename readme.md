@@ -143,8 +143,7 @@ Only return short video from suggestion.
 GetShortVideo
 
 ```node
-youtubesearchapi.GetShortVideo()
-
+youtubesearchapi.GetShortVideo();
 ```
 
 Get Short Video List Results
@@ -155,24 +154,107 @@ Get Short Video List Results
     id: "",
     type: "reel",
     thumbnail: {
-      url: '',
+      url: "",
       width: 405, //only return 405
-      height: 720 //only return 720
+      height: 720, //only return 720
     },
-    title: '',
-    inlinePlaybackEndpoint: {} //may not return all the time
-  }
-]
+    title: "",
+    inlinePlaybackEndpoint: {}, //may not return all the time
+  },
+];
 ```
 
 Will return Short Video list in Json Array format.
 
 ### Limitation:
+
 1. Only return short video from suggestion.
 2. inlinePlaybackEndpoint facing async issue.
 3. Only return first page of short video.
 
+## Error Handling
+
+The library provides comprehensive error handling with custom error classes and error codes.
+
+For detailed information about error messages and their translations, see [ERROR_MESSAGES.md](./ERROR_MESSAGES.md).
+
+### Error Classes
+
+```node
+const {
+  YouTubeAPIError,
+  ErrorHandler,
+  ErrorCodes,
+} = require("youtube-search-api");
+```
+
+### Error Codes
+
+| Error Code           | Description                            |
+| -------------------- | -------------------------------------- |
+| `NETWORK_ERROR`      | Network connection issues              |
+| `INIT_DATA_ERROR`    | Cannot get YouTube initialization data |
+| `PLAYER_DATA_ERROR`  | Cannot get YouTube player data         |
+| `INVALID_PLAYLIST`   | Invalid playlist ID                    |
+| `INVALID_VIDEO_ID`   | Invalid video ID                       |
+| `INVALID_CHANNEL_ID` | Invalid channel ID                     |
+| `RATE_LIMIT_ERROR`   | Rate limit exceeded                    |
+| `PARSE_ERROR`        | Data parsing error                     |
+| `UNKNOWN_ERROR`      | Unknown error                          |
+
+### Basic Error Handling
+
+```node
+try {
+  const result = await youtubesearchapi.GetVideoDetails("invalid_video_id");
+} catch (error) {
+  if (error instanceof YouTubeAPIError) {
+    console.log(`Error Code: ${error.code}`);
+    console.log(`Error Message: ${error.message}`);
+    console.log(`Status Code: ${error.statusCode}`);
+  }
+}
+```
+
+### Custom Error Logger
+
+```node
+const errorHandler = ErrorHandler.getInstance();
+errorHandler.setErrorLogger((error) => {
+  console.log(`[${new Date().toISOString()}] ${error.code}: ${error.message}`);
+  // Send to your logging service
+});
+```
+
+### Error Handling Examples
+
+```node
+// Handle specific error types
+try {
+  await youtubesearchapi.GetPlaylistData("invalid_playlist");
+} catch (error) {
+  if (error instanceof YouTubeAPIError) {
+    switch (error.code) {
+      case ErrorCodes.INVALID_PLAYLIST:
+        console.log("Please check the playlist ID");
+        break;
+      case ErrorCodes.NETWORK_ERROR:
+        console.log("Please check your internet connection");
+        break;
+      case ErrorCodes.RATE_LIMIT_ERROR:
+        console.log("Please try again later");
+        break;
+      default:
+        console.log("An unknown error occurred");
+    }
+  }
+}
+```
+
+See `example/error-handling-example.js` for more detailed examples.
+
 ### Docker:
+
 [Docker Image](https://hub.docker.com/r/damonwong/youtube-search-api-docker)
 
 ## Message

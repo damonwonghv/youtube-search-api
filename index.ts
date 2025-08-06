@@ -1,5 +1,100 @@
 import axios, { AxiosResponse } from "axios";
 
+// 自定義錯誤類別
+export class YouTubeAPIError extends Error {
+  public readonly code: string;
+  public readonly statusCode?: number;
+  public readonly originalError?: Error;
+
+  constructor(message: string, code: string, statusCode?: number, originalError?: Error) {
+    super(message);
+    this.name = 'YouTubeAPIError';
+    this.code = code;
+    this.statusCode = statusCode;
+    this.originalError = originalError;
+  }
+}
+
+// 錯誤代碼枚舉
+export enum ErrorCodes {
+  NETWORK_ERROR = 'NETWORK_ERROR',
+  INIT_DATA_ERROR = 'INIT_DATA_ERROR',
+  PLAYER_DATA_ERROR = 'PLAYER_DATA_ERROR',
+  INVALID_PLAYLIST = 'INVALID_PLAYLIST',
+  INVALID_VIDEO_ID = 'INVALID_VIDEO_ID',
+  INVALID_CHANNEL_ID = 'INVALID_CHANNEL_ID',
+  RATE_LIMIT_ERROR = 'RATE_LIMIT_ERROR',
+  PARSE_ERROR = 'PARSE_ERROR',
+  UNKNOWN_ERROR = 'UNKNOWN_ERROR'
+}
+
+// 錯誤處理器
+export class ErrorHandler {
+  private static instance: ErrorHandler;
+  private errorLogger?: (error: YouTubeAPIError) => void;
+
+  private constructor() { }
+
+  public static getInstance(): ErrorHandler {
+    if (!ErrorHandler.instance) {
+      ErrorHandler.instance = new ErrorHandler();
+    }
+    return ErrorHandler.instance;
+  }
+
+  public setErrorLogger(logger: (error: YouTubeAPIError) => void): void {
+    this.errorLogger = logger;
+  }
+
+  public handleError(error: any, context: string, code: ErrorCodes = ErrorCodes.UNKNOWN_ERROR): never {
+    let youtubeError: YouTubeAPIError;
+
+    if (error instanceof YouTubeAPIError) {
+      youtubeError = error;
+    } else if (axios.isAxiosError(error)) {
+      const statusCode = error.response?.status;
+      const message = this.getErrorMessage(code, context, error.message);
+      youtubeError = new YouTubeAPIError(message, code, statusCode, error);
+    } else {
+      const message = this.getErrorMessage(code, context, error?.message || error?.toString() || '未知錯誤');
+      youtubeError = new YouTubeAPIError(message, code, undefined, error);
+    }
+
+    // 記錄錯誤
+    if (this.errorLogger) {
+      this.errorLogger(youtubeError);
+    } else {
+      console.error(`[YouTubeAPI Error] ${youtubeError.code}: ${youtubeError.message}`);
+    }
+
+    throw youtubeError;
+  }
+
+  private getErrorMessage(code: ErrorCodes, context: string, originalMessage?: string): string {
+    const errorMessages: Record<ErrorCodes, string> = {
+      [ErrorCodes.NETWORK_ERROR]: `Network connection error: ${context}`,
+      [ErrorCodes.INIT_DATA_ERROR]: `Cannot get initialization data: ${context}`,
+      [ErrorCodes.PLAYER_DATA_ERROR]: `Cannot get player data: ${context}`,
+      [ErrorCodes.INVALID_PLAYLIST]: `Invalid playlist ID: ${context}`,
+      [ErrorCodes.INVALID_VIDEO_ID]: `Invalid video ID: ${context}`,
+      [ErrorCodes.INVALID_CHANNEL_ID]: `Invalid channel ID: ${context}`,
+      [ErrorCodes.RATE_LIMIT_ERROR]: `Rate limit exceeded, please try again later: ${context}`,
+      [ErrorCodes.PARSE_ERROR]: `Data parsing error: ${context}`,
+      [ErrorCodes.UNKNOWN_ERROR]: `Unknown error: ${context}`
+    };
+
+    const baseMessage = errorMessages[code];
+    return originalMessage ? `${baseMessage} (${originalMessage})` : baseMessage;
+  }
+
+  public createError(message: string, code: ErrorCodes, statusCode?: number, originalError?: Error): YouTubeAPIError {
+    return new YouTubeAPIError(message, code, statusCode, originalError);
+  }
+}
+
+// 全域錯誤處理器實例
+const errorHandler = ErrorHandler.getInstance();
+
 const youtubeEndpoint = `https://www.youtube.com`;
 
 interface YoutubeInitData {
@@ -17,7 +112,7 @@ interface YoutubePlayerDetail {
   keywords: string[];
 }
 
-interface SearchItem {
+export interface SearchItem {
   id: string;
   type: string;
   thumbnail: any;
@@ -82,29 +177,43 @@ const GetYoutubeInitData = async (url: string): Promise<YoutubeInitData> => {
     if (ytInitData && ytInitData.length > 1) {
       const data = ytInitData[1].split("</script>")[0].slice(0, -1);
 
-      if (page.data.split("innertubeApiKey").length > 0) {
-        apiToken = page.data
-          .split("innertubeApiKey")[1]
-          .trim()
-          .split(",")[0]
-          .split('"')[2];
+      if (page.data.split("innertubeApiKey").length > 1) {
+        const apiKeyPart = page.data.split("innertubeApiKey")[1];
+        if (apiKeyPart) {
+          apiToken = apiKeyPart
+            .trim()
+            .split(",")[0]
+            .split('"')[2];
+        }
       }
 
-      if (page.data.split("INNERTUBE_CONTEXT").length > 0) {
-        context = JSON.parse(
-          page.data.split("INNERTUBE_CONTEXT")[1].trim().slice(2, -2)
-        );
+      if (page.data.split("INNERTUBE_CONTEXT").length > 1) {
+        const contextPart = page.data.split("INNERTUBE_CONTEXT")[1];
+        if (contextPart) {
+          context = JSON.parse(
+            contextPart.trim().slice(2, -2)
+          );
+        }
       }
 
       initdata = JSON.parse(data);
       return { initdata, apiToken, context };
     } else {
-      console.error("cannot_get_init_data");
-      throw new Error("cannot_get_init_data");
+      errorHandler.handleError(
+        new Error("Cannot parse YouTube initialization data"),
+        `URL: ${url}`,
+        ErrorCodes.INIT_DATA_ERROR
+      );
+      // 這行永遠不會執行，因為 handleError 會拋出錯誤
+      throw new Error("Unreachable code");
     }
   } catch (ex) {
-    console.error(ex);
-    throw ex;
+    if (ex instanceof YouTubeAPIError) {
+      throw ex;
+    }
+    errorHandler.handleError(ex, `Failed to get initialization data - URL: ${url}`, ErrorCodes.INIT_DATA_ERROR);
+    // 這行永遠不會執行，因為 handleError 會拋出錯誤
+    throw new Error("Unreachable code");
   }
 };
 
@@ -120,12 +229,21 @@ const GetYoutubePlayerDetail = async (
       initdata = JSON.parse(data);
       return { ...initdata.videoDetails };
     } else {
-      console.error("cannot_get_player_data");
-      throw new Error("cannot_get_player_data");
+      errorHandler.handleError(
+        new Error("Cannot parse YouTube player data"),
+        `URL: ${url}`,
+        ErrorCodes.PLAYER_DATA_ERROR
+      );
+      // 這行永遠不會執行，因為 handleError 會拋出錯誤
+      throw new Error("Unreachable code");
     }
   } catch (ex) {
-    console.error(ex);
-    throw ex;
+    if (ex instanceof YouTubeAPIError) {
+      throw ex;
+    }
+    errorHandler.handleError(ex, `Failed to get player data - URL: ${url}`, ErrorCodes.PLAYER_DATA_ERROR);
+    // 這行永遠不會執行，因為 handleError 會拋出錯誤
+    throw new Error("Unreachable code");
   }
 };
 
@@ -215,8 +333,12 @@ const GetData = async (
       nextPage: { nextPageToken: apiToken, nextPageContext }
     };
   } catch (ex) {
-    console.error(ex);
-    throw ex;
+    if (ex instanceof YouTubeAPIError) {
+      throw ex;
+    }
+    errorHandler.handleError(ex, `Search failed - keyword: ${keyword}`, ErrorCodes.UNKNOWN_ERROR);
+    // 這行永遠不會執行，因為 handleError 會拋出錯誤
+    throw new Error("Unreachable code");
   }
 };
 
@@ -266,8 +388,12 @@ const nextPage = async (
     const itemsResult = limit !== 0 ? items.slice(0, limit) : items;
     return { items: itemsResult, nextPage };
   } catch (ex) {
-    console.error(ex);
-    throw ex;
+    if (ex instanceof YouTubeAPIError) {
+      throw ex;
+    }
+    errorHandler.handleError(ex, `Failed to get next page`, ErrorCodes.UNKNOWN_ERROR);
+    // 這行永遠不會執行，因為 handleError 會拋出錯誤
+    throw new Error("Unreachable code");
   }
 };
 
@@ -295,11 +421,21 @@ const GetPlaylistData = async (
       const itemsResult = limit !== 0 ? items.slice(0, limit) : items;
       return { items: itemsResult, metadata };
     } else {
-      throw new Error("invalid_playlist");
+      errorHandler.handleError(
+        new Error("Invalid playlist"),
+        `播放清單 ID: ${playlistId}`,
+        ErrorCodes.INVALID_PLAYLIST
+      );
+      // 這行永遠不會執行，因為 handleError 會拋出錯誤
+      throw new Error("Unreachable code");
     }
   } catch (ex) {
-    console.error(ex);
-    throw ex;
+    if (ex instanceof YouTubeAPIError) {
+      throw ex;
+    }
+    errorHandler.handleError(ex, `Failed to get playlist - ID: ${playlistId}`, ErrorCodes.UNKNOWN_ERROR);
+    // 這行永遠不會執行，因為 handleError 會拋出錯誤
+    throw new Error("Unreachable code");
   }
 };
 
@@ -392,7 +528,7 @@ const GetVideoDetails = async (videoId: string): Promise<VideoDetails> => {
   }
 };
 
-const VideoRender = (json: any): SearchItem => {
+export const VideoRender = (json: any): SearchItem => {
   try {
     if (json && (json.videoRenderer || json.playlistVideoRenderer)) {
       let videoRenderer = json.videoRenderer || json.playlistVideoRenderer;
@@ -402,7 +538,7 @@ const VideoRender = (json: any): SearchItem => {
         videoRenderer.badges.length > 0 &&
         videoRenderer.badges[0].metadataBadgeRenderer &&
         videoRenderer.badges[0].metadataBadgeRenderer.style ===
-          "BADGE_STYLE_TYPE_LIVE_NOW"
+        "BADGE_STYLE_TYPE_LIVE_NOW"
       ) {
         isLive = true;
       }
@@ -460,7 +596,7 @@ const compactVideoRenderer = (json: any): SearchItem => {
     compactVideoRendererJson.badges.length > 0 &&
     compactVideoRendererJson.badges[0].metadataBadgeRenderer &&
     compactVideoRendererJson.badges[0].metadataBadgeRenderer.style ===
-      "BADGE_STYLE_TYPE_LIVE_NOW"
+    "BADGE_STYLE_TYPE_LIVE_NOW"
   ) {
     isLive = true;
   }
